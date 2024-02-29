@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Switch, Keyboard } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather'
@@ -7,16 +7,18 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import schema from './schema';
 import { useNavigation } from '@react-navigation/native'
+import { AuthContext } from '../../contexts/auth';
 
 
 export default function CreateUser() {
 
     const navigation = useNavigation();
-    
+    const { create } = useContext(AuthContext)
+
     const { control, handleSubmit, formState: { errors }, register } = useForm({
         resolver: yupResolver(schema)
     })
-    
+
     const [iconEye, setIconEye] = useState('eye');
     const [iconEyeConfirm, setIconEyeConfirm] = useState('eye');
     const [visible, setVisible] = useState(true);
@@ -47,15 +49,15 @@ export default function CreateUser() {
 
     function handleCreate(data) {
         Keyboard.dismiss();
-        console.log(data)
+        create(data);
     }
 
     return (
 
         <View style={styles.container}>
 
-            <TouchableOpacity style={styles.backIcon} onPress={()=>navigation.goBack()}>
-            <AntDesign  name='back' size={25} color='#7E7E7E' />
+            <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+                <AntDesign name='back' size={25} color='#7E7E7E' />
             </TouchableOpacity>
             <Text style={styles.title}>Registre-se</Text>
 

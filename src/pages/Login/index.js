@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Switch, Keyboard } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather'
@@ -7,11 +7,14 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import schema from './schema';
 import { useNavigation } from '@react-navigation/native'
+import { AuthContext } from '../../contexts/auth';
 
 
 export default function Login() {
 
+
     const navigation = useNavigation();
+    const { login } = useContext(AuthContext)
 
     const { control, handleSubmit, formState: { errors }, register } = useForm({
         resolver: yupResolver(schema)
@@ -35,8 +38,11 @@ export default function Login() {
 
     function handleLogin(data) {
         Keyboard.dismiss();
-        console.log(data);
-        console.log(stayConected)
+        const req = {
+            email: data.email,
+            password: data.password,
+        }
+        login(req);
     }
 
 
@@ -103,7 +109,7 @@ export default function Login() {
 
             <View style={styles.stayConectedArea}>
                 <Text style={styles.textForgotPassword}>Manter conectado</Text>
-                <TouchableOpacity style={styles.checkBoxArea} onPress={()=>setStayConected(!stayConected)}>
+                <TouchableOpacity style={styles.checkBoxArea} onPress={() => setStayConected(!stayConected)}>
                     {stayConected ? <AntDesign name='checksquare' size={23} color='#7E7E7E' /> :
                         <View style={styles.checkBox}></View>
                     }
@@ -182,7 +188,7 @@ const styles = StyleSheet.create({
         gap: 5,
     },
 
-    checkBoxArea:{
+    checkBoxArea: {
         width: 23,
         height: 23,
         justifyContent: 'center',

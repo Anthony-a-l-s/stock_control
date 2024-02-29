@@ -1,20 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { validationPassword } from "../../utils/validations";
-/*function verifyPassword(password, confirmPassword) {
-    return this.test("verifyPassword", ({password: password, confirm: confirmPassword}), function (value) {
-        const { path, createError } = this;
-        console.log(value)
-        if (value.password !== value.confirmPassword) {
-            return createError({
-                path,
-                message: "As senhas devem ser iguais"
-            });
-        }
-        return true;
-    });
-
-}*/
 
 function isValidPassword(password) {
     return this.test("isValidPassword", password, function (value) {

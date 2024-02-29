@@ -1,32 +1,26 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useContext } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import AuthRoutes from './authRoutes';
+import AppRoutes from './appRoutes';
 
-import Login from '../pages/Login'
-import CreateUser from '../pages/CreateUser';
+import { AuthContext } from '../contexts/auth'
 
-const Stack = createNativeStackNavigator();
 
-export default class Routes extends Component {
-    render() {
+export default function Routes() {
+    const { signed, loading } = useContext(AuthContext);
+    if (loading) {
         return (
-            <Stack.Navigator>
-                <Stack.Screen
-                    name='Login'
-                    component={Login}
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-
-                <Stack.Screen
-                    name='CreateUser'
-                    component={CreateUser}
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-            </Stack.Navigator>
-        );
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#131313'
+            }}>
+                <ActivityIndicator size='large' color='#7E7E7E' />
+            </View>
+        )
     }
+        return (
+            signed? <AppRoutes /> : <AuthRoutes />
+        );    
 }
