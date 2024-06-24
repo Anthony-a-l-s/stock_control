@@ -8,7 +8,10 @@ export const AuthContext = createContext({});
 function AuthProvider({ children }) {
 
     const [user, setUser] = useState(null);
+    const [loged, setLoged] = useState(false);
     const [loading, setLoading] = useState(true)
+    const [loginError, setLoginerror] = useState('')
+
     const navigation = useNavigation();
 
 
@@ -33,28 +36,38 @@ function AuthProvider({ children }) {
             email: data.email,
             password: data.password
         };
-        try {
-            const response = await api.post('/login', req);
-
-            const { id, name, token, username, email, admin } = response.data;
+        await api.post('/login', req)
+            .then( async(response) => {
+                console.log(response.data)
+                const { id, name, token, username, email, admin } = response.data;
 
 
                 await AsyncStorage.setItem('@Token', token);
+
+
                 api.defaults.headers['Authorization'] = `Bearer ${token}`
-            
-            setUser({
-                id,
-                name,
-                token,
-                username,
-                email,
-                admin,
+                setUser({
+                    id,
+                    name,
+                    token,
+                    username,
+                    email,
+                    admin,
+                })
+
+                navigation.navigate('Home')
+            }).catch((error)=>{
+                console.log('Erro ao logar!');
+                console.log(error);
+                setLoginerror('Email ou senha icorretos')
             })
-            navigation.navigate('Home')
-        }
-        catch {
-            console.log('Erro ao logar!')
-        }
+    }
+
+    async function logout() {
+        await AsyncStorage.removeItem('@Token');
+        setUser(null);
+
+
     }
 
     async function create(data) {
@@ -75,7 +88,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, login, create, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, login, create, loading, logout, loginError }}>
             {children}
         </AuthContext.Provider>
     )

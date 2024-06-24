@@ -5,7 +5,7 @@ import Home from '../pages/Home';
 const AppStack = createNativeStackNavigator();
 
 export default function AppRoutes() {
-
+    
     return (
         <AppStack.Navigator>
             <AppStack.Screen
@@ -16,5 +16,7 @@ export default function AppRoutes() {
                 }}
             />
         </AppStack.Navigator>
+
+        
     );
 }

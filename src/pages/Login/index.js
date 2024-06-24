@@ -14,14 +14,13 @@ export default function Login() {
 
 
     const navigation = useNavigation();
-    const { login } = useContext(AuthContext)
+    const { login, loginError } = useContext(AuthContext)
 
     const { control, handleSubmit, formState: { errors }, register } = useForm({
         resolver: yupResolver(schema)
     })
 
 
-    const [stayConected, setStayConected] = useState(false);
     const [iconEye, setIconEye] = useState('eye');
     const [visible, setVisible] = useState(true);
 
@@ -50,7 +49,7 @@ export default function Login() {
 
         <View style={styles.container}>
 
-            <Text style={styles.title}>Login</Text>
+            <Text style={styles.title}>Entrar</Text>
 
             <View style={styles.areaInput}>
 
@@ -100,6 +99,7 @@ export default function Login() {
                     </TouchableOpacity>
                 </View>
                 {errors.password && <Text style={styles.errorMessage}>{errors.password?.message}</Text>}
+                {loginError && <Text style={styles.errorMessage}>{loginError}</Text>}
 
             </View>
 
@@ -107,15 +107,6 @@ export default function Login() {
                 <Text style={styles.textForgotPassword}>Esqueci minha senha</Text>
             </TouchableOpacity>
 
-            <View style={styles.stayConectedArea}>
-                <Text style={styles.textForgotPassword}>Manter conectado</Text>
-                <TouchableOpacity style={styles.checkBoxArea} onPress={() => setStayConected(!stayConected)}>
-                    {stayConected ? <AntDesign name='checksquare' size={23} color='#7E7E7E' /> :
-                        <View style={styles.checkBox}></View>
-                    }
-
-                </TouchableOpacity>
-            </View>
 
             <TouchableOpacity style={styles.buttonLogin} onPress={handleSubmit(handleLogin)}>
                 <Text style={styles.TextLogin}>Entrar</Text>
@@ -181,11 +172,6 @@ const styles = StyleSheet.create({
     textForgotPassword: {
         color: '#7E7E7E',
         fontSize: 15,
-    },
-
-    stayConectedArea: {
-        flexDirection: 'row',
-        gap: 5,
     },
 
     checkBoxArea: {

@@ -17,7 +17,7 @@ export default function AuthRoutes() {
                 }}
             />
             <AuthStack.Screen
-                name='Create user'
+                name='CreateUser'
                 component={CreateUser}
                 options={{
                     headerShown: false,
